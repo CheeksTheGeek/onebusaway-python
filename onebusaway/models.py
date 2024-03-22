@@ -367,9 +367,9 @@ class Schedule:
     frequency: Frequency = None
 
     def __post_init__(self):
-        if self.stopTimes:
+        if self.stopTimes and isinstance(self.stopTimes[0], dict):
             self.stopTimes = [TripStopTime(**stopTime) for stopTime in self.stopTimes]
-        if self.frequency:
+        if self.frequency and isinstance(self.frequency, dict):
             self.frequency = Frequency(**self.frequency)
 
     __repr__ = generic_repr
@@ -407,9 +407,9 @@ class TripStatus:
     situationIds: List[str] = None
 
     def __post_init__(self):
-        if self.position:
+        if self.position and isinstance(self.position, dict):
             self.position = Position(**self.position)
-        if self.lastKnownLocation:
+        if self.lastKnownLocation and isinstance(self.lastKnownLocation, dict):
             self.lastKnownLocation = Position(**self.lastKnownLocation)
 
     __repr__ = generic_repr
@@ -426,9 +426,9 @@ class TripDetails:
     schedule: Schedule = None
 
     def __post_init__(self):
-        if self.status:
+        if self.status and isinstance(self.status, dict):
             self.status = TripStatus(**self.status)
-        if self.schedule:
+        if self.schedule and isinstance(self.schedule, dict):
             self.schedule = Schedule(**self.schedule)
 
     __repr__ = generic_repr

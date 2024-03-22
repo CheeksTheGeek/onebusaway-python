@@ -24,6 +24,19 @@ from .models import (
 )
 from .utils import dynamic_dataclass_from_dict
 
+from .exceptions import (
+    OneBusAwayException,
+    APIKeyMissingError,
+    APIKeyInvalidError,
+    BadRequestError,
+    NotFoundError,
+    ServerError,
+    ResponseParseError,
+    DataValidationError,
+    StopNotFoundError,
+    TripNotFoundError,
+)
+
 
 class OneBusAway:
     def __init__(
@@ -305,7 +318,11 @@ class OneBusAway:
 
     def stop(self, id: str, get_references: bool = False) -> Stop:
         response = self._get(f"/stop/{id}.json")
-        return Stop(**response.data["entry"])
+        # return Stop(**response.data["entry"]) if response.data
+        if response.code == 200:
+            return Stop(**response.data["entry"])
+        else:
+            raise NotFoundError(response.text)
 
     def stops_for_location(
         self,
